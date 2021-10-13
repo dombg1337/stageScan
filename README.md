@@ -1,4 +1,4 @@
-# stageScan
+# stageScan (c) dombg
 The script stages scans with masscan and nmap providing greater time efficiency (than nmap -p- scans) while still scanning all ports on the target.
 
 
