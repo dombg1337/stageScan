@@ -3,19 +3,19 @@
 function printHelp {
     printBanner
     echo "Usage:"
-    echo "    --ip \"192.168.1.1\" | required"
-    echo "    --vuln | if set, triggers nmap vuln scripts | optional"
-    echo "    -e/--interface \"tun0\" | to specify network interface, default: eth0 | optional"
-    echo "    -h/--help | display the help menu"
+    echo "    --ip \"192.168.1.1\"    | set the target ip                          | required"
+    echo "    --vuln                | if set, triggers nmap vuln scripts         | optional"
+    echo "    -e/--interface \"tun0\" | specify network interface, default: eth0   | optional"
+    echo "    -h/--help             | display the help menu"
     
     exit 1
 }
 
 function printBanner {
-	/usr/bin/base64 -d <<<"H4sIAAAAAAAAA5VSWxKDMAj8zyn4q85YuRAz60E4fGGJqY522oIPyC6LJIoAkG7vAIfVo+XqDV/u
-Vppo5FaJh9OU6n6V1oTswh92WmnBRpCzX4g5OIbJ9nyubJBfSUcvZVPnCD2VgjNKBdR4kOacw7sD
-NQalTSvfAnhwuKBo15QCSCe8jcg61nZVZ4W7TJhFLUU1Yud99AnYg3rOJ9iZE2vGnUixBR7PuJil
-eL4KwGhu+56MCuiAg7j2wiW0736Gz2ZxNnFA+o2XDf7V/tGcY7cXH9i3IeACAAA=" | /usr/bin/gunzip
+	/usr/bin/base64 -d <<<"H4sIAAAAAAAAA62STQ7EIAiF95zi7aaTTMuFSOhBOPzwo7aNJrMZrKh88Kq1BA2DYrYiS1C9rWZ+
+mxOnkMGmtE4WwJF4S5tLHxESnPt+eExRB+lei+S0glrbjvqxpxrzpJXlPcQUTYlKRXzF0BM2PKQI
+D4SXxrYtcb3glp34HDNpjFiinmGGLYvKh2ojEajg1TbVPin/fmDLdTKSuEmGD/581MIjvF6kocgv
+XemfaNQoD+yJRyt0JVr8Iry48buJXw/Y035YKk0vsNz2P6yU6Ask+waJCQMAAA==" | /usr/bin/gunzip
 }
 
 # check if no argument was supplied and print help
