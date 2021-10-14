@@ -24,7 +24,6 @@ Mind: Please don't grant users permanent sudo rights to this script, easy PrivEs
 sudo ./stageScan --ip 192.168.1.1 --vuln
 sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rate=800 -e tun0 --vuln
 ```
-
 ### List of IP's to check 
 
 stageScan does not currently support a list of IP's to test. To get around this issue, you can make use of the xargs command and supply a list of ips, each in a new line.
