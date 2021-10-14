@@ -1,8 +1,8 @@
 # stageScan (c) dombg
 
-## Description
+## Why should I use stageScan?
 
-The script stages scans with masscan and nmap providing greater time efficiency (than nmap -p- scans) while still scanning all ports on the target.
+The script stages scans with masscan and nmap providing greater time efficiency (than nmap -p- scans) while still scanning all ports on the target and leveraging nmap's powerful capabilities including NSE.
 
 ## Execution
 
