@@ -3,3 +3,5 @@ The script stages scans with masscan and nmap providing greater time efficiency 
 
 
 ![image](https://user-images.githubusercontent.com/7427205/137182551-3795655b-4ac0-48ee-8133-1e33d1999671.png)
+
+Mind: Please don't give users permanent sudo rights for this script, easy PrivEsc via Command Injection since I don't sanitize any input.
