@@ -8,7 +8,7 @@ The script stages scans with masscan and nmap providing greater time efficiency 
 
 1. Masscan will scan all 65535 TCP and UDP ports
 2. Nmap will perform safe scripts (-sC) and service+version (-sV) enumeration on the ports found by masscan.
-3. Optionally runs nmap vuln scripts (--scripts="vuln")
+3. Optionally runs nmap vuln scripts (--scripts="vuln") as an additional scan.
 
 ## Help
 
