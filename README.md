@@ -16,7 +16,9 @@ This is especially helpful in lab environments and/or CTF's (not recommended for
 
 ![image](https://user-images.githubusercontent.com/7427205/137318948-562133cc-241b-4b50-a5a6-d06d5bfcbab7.png)
 
-### Usage examples:
+Mind: Please don't grant users permanent sudo rights to this script, easy PrivEsc via Command Injection since I don't sanitize any input.
+
+### Usage examples
 
 ```
 sudo ./stageScan --ip 192.168.1.1 --vuln
@@ -29,4 +31,11 @@ stageScan does not currently support a list of IP's to test. To get around this 
 
 `cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'`
 
-Mind: Please don't grant users permanent sudo rights to this script, easy PrivEsc via Command Injection since I don't sanitize any input.
+## Requirements
+
+- masscan
+- nmap
+
+## Disclaimer
+
+stageScan is written for network security assessments where the scanning is explicitly allowed by the owner of the target system/network, please use it responsively. I'm not responsible for any misuse of this tool.
