@@ -3,11 +3,14 @@
 function printHelp {
     printBanner
     echo "Usage:"
-    echo "    --ip \"192.168.1.1\"    | set the target ip                          | required"
-    echo "    --vuln                | if set, triggers nmap vuln scripts         | optional"
-    echo "    -e/--interface \"tun0\" | specify network interface, default: eth0   | optional"
-    echo "    -h/--help             | display the help menu"
-    
+    echo "|    -ip/--ip 192.168.1.1           | set the target ip                                          | required"
+    echo "|    -r/--rate 500                  | set the masscan packet/second rate, default: 1000          | optional"
+    echo "|    -d/--directory /home/dombg/    | set the output directory (with trailing /), default /tmp/  | optional"
+    echo "|    --vuln                         | if set, triggers nmap vuln scripts                         | optional"
+    echo "|    -e/--interface tun0            | specify network interface, default: eth0                   | optional"
+    echo "|    -h/--help                      | display the help menu"
+    printf "\n\n"
+    echo "Command to scan a list of IP's (supply each in a newline): cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'"
     exit 1
 }
 
@@ -37,17 +40,24 @@ fi
 ip=""
 vuln=""
 interface="eth0"
-
+rate=1000
+outputDirectory="/tmp/"
 # Load the user defined parameters
 while [[ $# > 0 ]]
 do
         case "$1" in
-
-                --ip)
+                -ip|--ip)
                         ip="$2"
                         shift #pop the first parameter in the series, making what used to be $2, now be $1.
                         ;;
-
+		-r|--rate)
+                        rate="$2"
+                        shift #pop the first parameter in the series, making what used to be $2, now be $1.
+                        ;;
+		-d|--directory)
+                        outputDirectory="$2"
+                        shift #pop the first parameter in the series, making what used to be $2, now be $1.
+                        ;;
                 --vuln)
                         vuln=1
                         shift
@@ -56,8 +66,7 @@ do
 			interface="$2"
 			shift
 			;;
-
-                --help|-h)
+                -h|--help)
                         printHelp
 			;;
         esac
@@ -73,10 +82,14 @@ fi
 printBanner
 printSeparator
 
-# 1. prepare result directory
+# 1. prepare directory to store results
+if [[ "${outputDirectory: -1}" != "/" || ! -d "$outputDirectory" ]]; then
+	printf "Error: \n\nDirectory $outputDirectory does not exist or has no trailing slash! Please use existing dir and supply the / at the end\n\n"
+	exit 1
+fi
 
 currentDate=`/usr/bin/date "+%Y%m%d-%H%M%S"`
-resultDirectory="/tmp/scanResults_"$ip"_"$currentDate"/"
+resultDirectory=$outputDirectory"stageScan_results_"$ip"_"$currentDate"/"
 printf "Preparing output directory\n\n"
 printf "Results are stored in /tmp folder: "$resultDirectory"\n"
 mkdir $resultDirectory
@@ -84,40 +97,48 @@ printSeparator
 
 # 2. run masscan on all ports with supplied ip and interface and print results
 
-printf "Run masscan on all ports with on target(s) "$ip" using the interface "$interface"\n\n"
+printf "Run masscan on all ports, target: "$ip" using the interface "$interface"\n\n"
 masscanOutputFile=$resultDirectory"masscanOutput"
-printf "Command: /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=1000 > $masscanOutputFile"
+printf "Command: /usr/bin/sudo /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate > $masscanOutputFile\n\n"
 
-/usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=1000 > $masscanOutputFile
+/usr/bin/sudo /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate > $masscanOutputFile
 
 printf "Results of masscan\n\n"
 /usr/bin/sudo bash -c "cat $masscanOutputFile"
-
 printSeparator
 
 # 3. filter found tcp and udp ports separately
+
 # ---------------------------------cat masscan output-------- get 4th field ----only tcp------keep 0-9 only--------replace \n with ,-----remove last ,----
 openTCPPorts=`/usr/bin/sudo /usr/bin/cat $masscanOutputFile | cut -d ' ' -f 4 | grep tcp |  sed 's/[^0-9]//g' | /usr/bin/tr '\n' ',' | sed 's/\(.*\),/\1/'`
 openUDPPorts=`/usr/bin/sudo /usr/bin/cat $masscanOutputFile | cut -d ' ' -f 4 | grep udp |  sed 's/[^0-9]//g' | /usr/bin/tr '\n' ',' | sed 's/\(.*\),/\1/'`
-
-openPorts="T:"$openTCPPorts",U:"$openUDPPorts # nmap format
+openPorts=""
+if [ ! -z $openTCPPorts ]; then
+	openPorts="T:"$openTCPPorts","
+fi
+if [ ! -z $openUDPPorts ]; then
+	openPorts=$openPorts"U:"$openUDPPorts # nmap port specification f.e. "T:80,U:161" but "T:80," also works
+fi
+# check if open ports were detected
+if [ -z $openPorts ]; then
+	printf "No open ports (TCP/UDP) were detected by masscan on the target. Execution finished successfully."
+	exit 0
+fi
 
 # 4. run nmap service and version scan, display only open port results, save as all output formats
 printf "Run nmap service and version scan on all found ports (tcp and udp)\n\n"
 nmapServiceScanOutputFile=$resultDirectory"nmapServiceScan"
 printf "Command: /usr/bin/sudo /usr/bin/nmap -p $openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open\n\n"  
-
 sleep 2
-(/usr/bin/sudo /usr/bin/nmap -p $openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open && printf "Scan successful")
+(/usr/bin/sudo /usr/bin/nmap -p$openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open && printf "Scan successful")
 printSeparator
 
 # 5. run nmap vuln scan if --vuln was set
 
-if [ vuln ]; then
+if [ vuln = 1 ]; then
 	printf "Run nmap vuln scan on all found ports (tcp and udp)\n\n"
 	nmapVulnScanOutputFile=$resultDirectory"nmapVulnScan"
 	printf "Command: /usr/bin/sudo /usr/bin/nmap -p $openPorts -sSU --script="vuln" -oA $nmapVulnScanOUtputFile $ip --open\n\n" 	
-	
 	sleep 2
 	(/usr/bin/sudo /usr/bin/nmap -p$openPorts -sSU --script="vuln" -oA $nmapVulnScanOUtputFile $ip --open && printf "Vuln Scan successful")
 	printSeparator
