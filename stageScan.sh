@@ -15,10 +15,8 @@ function printHelp {
 }
 
 function printBanner {
-	/usr/bin/base64 -d <<<"H4sIAAAAAAAAA62STQ7EIAiF95zi7aaTTMuFSOhBOPzwo7aNJrMZrKh88Kq1BA2DYrYiS1C9rWZ+
-mxOnkMGmtE4WwJF4S5tLHxESnPt+eExRB+lei+S0glrbjvqxpxrzpJXlPcQUTYlKRXzF0BM2PKQI
-D4SXxrYtcb3glp34HDNpjFiinmGGLYvKh2ojEajg1TbVPin/fmDLdTKSuEmGD/581MIjvF6kocgv
-XemfaNQoD+yJRyt0JVr8Iry48buJXw/Y035YKk0vsNz2P6yU6Ask+waJCQMAAA==" | /usr/bin/gunzip
+	/usr/bin/base64 -d <<<"H4sIAAAAAAAAA21Q0QrDMAh89yvubR20yfo/gqUM9jT2Nhj48fNM10KzM5x6KiYREIYeRnSqkDzsjJoTnS5NdQvPNT82xTJNJcMmpoNUsN8s/ALfGZrtWvcSLiFC1OjcMXDNxmxSNtYUmpgmbq0WZzQng8ycA1sYpby1S/cr9c/jT/9zILcd6fCey63MI9YP7q/n+rjKF6ccN5OBAQAA" | /usr/bin/gunzip
+	
 }
 
 # check if no argument was supplied and print help
@@ -143,6 +141,5 @@ if [ vuln = 1 ]; then
 	(/usr/bin/sudo /usr/bin/nmap -p$openPorts -sSU --script="vuln" -oA $nmapVulnScanOUtputFile $ip --open && printf "Vuln Scan successful")
 	printSeparator
 fi
-
 
 printf "Results are stored in: "$resultDirectory
