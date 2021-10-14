@@ -16,9 +16,16 @@ This is especially helpful in lab environments and/or CTF's (not recommended for
 
 ![image](https://user-images.githubusercontent.com/7427205/137318948-562133cc-241b-4b50-a5a6-d06d5bfcbab7.png)
 
-List of IP's to check: stageScan does not currently support a list of IP's to test. 
-To get around this issue, you can make use of the xargs command and supply a list of ips, each in a new line.
-F.e.:
+### Usage examples:
+
+```
+sudo ./stageScan --ip 192.168.1.1 --vuln
+sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rate=800 -e tun0 --vuln
+```
+
+### List of IP's to check 
+
+stageScan does not currently support a list of IP's to test. To get around this issue, you can make use of the xargs command and supply a list of ips, each in a new line.
 
 `cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'`
 
