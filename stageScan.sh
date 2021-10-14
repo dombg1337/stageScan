@@ -124,3 +124,4 @@ if [ vuln ]; then
 fi
 
 
+printf "Results are stored in: "$resultDirectory
