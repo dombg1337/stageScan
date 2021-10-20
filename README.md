@@ -26,7 +26,7 @@ sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rat
 ```
 ### List of IP's to check 
 
-stageScan does not currently support a list of IP's to test. To get around this issue, you can make use of the xargs command and supply a list of ips, each in a new line.
+stageScan does not currently support a list of IP's to test. To get around this issue (still only sequential solution), you can make use of the xargs command and supply a list of ips, each in a new line.
 
 `cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'`
 
