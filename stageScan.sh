@@ -89,7 +89,7 @@ fi
 currentDate=`/usr/bin/date "+%Y%m%d-%H%M%S"`
 resultDirectory=$outputDirectory"stageScan_results_"$ip"_"$currentDate"/"
 printf "Preparing output directory\n\n"
-printf "Results are stored in /tmp folder: "$resultDirectory"\n"
+printf "Results are stored in: "$resultDirectory"\n"
 mkdir $resultDirectory
 printSeparator
 
