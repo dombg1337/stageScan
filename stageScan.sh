@@ -136,9 +136,9 @@ printSeparator
 if [ $vuln = 1 ]; then
 	printf "Run nmap vuln scan on all found ports (tcp and udp)\n\n"
 	nmapVulnScanOutputFile=$resultDirectory"nmapVulnScan"
-	printf "Command: /usr/bin/sudo /usr/bin/nmap -p $openPorts -sSU --script="vuln" -oA $nmapVulnScanOUtputFile $ip --open -vvv\n\n" 	
+	printf "Command: /usr/bin/sudo /usr/bin/nmap -p $openPorts -sSU --script='vuln' -oA $nmapVulnScanOutputFile $ip --open -vvv\n\n" 	
 	sleep 2
-	(/usr/bin/sudo /usr/bin/nmap -p$openPorts -sSU --script="vuln" -oA $nmapVulnScanOUtputFile $ip --open -vvv && printf "Vuln Scan successful")
+	(/usr/bin/sudo /usr/bin/nmap -p$openPorts -sSU --script="vuln" -oA $nmapVulnScanOutputFile $ip --open -vvv && printf "Vuln Scan successful")
 	printSeparator
 fi
 
