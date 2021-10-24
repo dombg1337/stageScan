@@ -14,7 +14,7 @@ This is especially helpful in lab environments and/or CTF's (not recommended for
 
 ## Help
 
-![image](https://user-images.githubusercontent.com/7427205/137318948-562133cc-241b-4b50-a5a6-d06d5bfcbab7.png)
+![image](https://user-images.githubusercontent.com/7427205/138583268-a974400b-64fb-420e-8f8c-e1a94c35d658.png)
 
 Mind: Please don't grant users permanent sudo rights to this script, easy PrivEsc via Command Injection since I don't sanitize any input.
 
@@ -22,6 +22,7 @@ Mind: Please don't grant users permanent sudo rights to this script, easy PrivEs
 
 ```
 sudo ./stageScan --ip 192.168.1.1 --vuln
+sudo ./stageScan --ip 192.168.1.1 --rate=10000 --vuln --stylesheet
 sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rate=800 -e tun0 --vuln
 ```
 ### List of IP's to check 
@@ -34,6 +35,11 @@ stageScan does not currently support a list of IP's to test. To get around this 
 
 - masscan
 - nmap
+- xsltproc (only for --stylesheet option)
+
+## Credits
+
+[Honze-net bootstrap stylesheet](https://github.com/honze-net/nmap-bootstrap-xsl/), which is used to create a nice HTML output of the nmap results.
 
 ## Disclaimer
 
