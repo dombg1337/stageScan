@@ -16,7 +16,7 @@ This is especially helpful in lab environments and/or CTF's (not recommended for
 
 ![image](https://user-images.githubusercontent.com/7427205/138583268-a974400b-64fb-420e-8f8c-e1a94c35d658.png)
 
-Mind: Please don't grant users permanent sudo rights to this script, easy PrivEsc via Command Injection since I don't sanitize any input.
+**Mind:** Please don't grant users permanent sudo rights to this script, easy PrivEsc via Command Injection since I don't sanitize any input.
 
 ### Usage examples
 
