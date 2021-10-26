@@ -33,8 +33,8 @@ stageScan does not currently support a list of IP's to test. To get around this 
 
 ## Requirements
 
-- masscan
-- nmap
+- [masscan](https://github.com/robertdavidgraham/masscan)
+- [nmap](https://nmap.org/)
 - xsltproc (only for --stylesheet option)
 
 ## Credits
