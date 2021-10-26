@@ -19,7 +19,6 @@ function printBanner {
    	/usr/bin/base64 -d <<<"H4sIAAAAAAAAA21Q0QrDMAh89yvubR20yfo/gqUM9jT2Nhj48fNM10KzM5x6KiYREIYeRnSqkDzsjJoTnS5NdQvPNT82xTJNJcMmpoNUsN8s/ALfGZrtWvcSLiFC1OjcMXDNxmxSNtYUmpgmbq0WZzQng8ycA1sYpby1S/cr9c/jT/9zILcd6fCey1xuI9YP7q/n+rjKF8oeWveBAQAA" | /usr/bin/gunzip
 }
 
-# check if no argument was supplied and print help
 
 function printSeparator {
 	printf "\n"
@@ -27,6 +26,7 @@ function printSeparator {
 	printf "\n"
 }
 
+# check if no argument was supplied, then print help
 if [ -z "$1" ]; then
     echo "No argument supplied"
     printHelp
@@ -47,23 +47,23 @@ do
         case "$1" in
                 -ip|--ip)
                         ip="$2"
-                        shift #pop the first parameter in the series, making what used to be $2, now be $1.
+                        shift 2 #shift parameters to the left.So $3 will now be $1.
                         ;;
 		-r|--rate)
                         rate="$2"
-                        shift #pop the first parameter in the series, making what used to be $2, now be $1.
+                        shift 2
                         ;;
 		-d|--directory)
                         outputDirectory="$2"
-                        shift #pop the first parameter in the series, making what used to be $2, now be $1.
+                        shift 2
                         ;;
                 --vuln)
                         vuln=1
-                        shift
+			shift
                         ;;
 		-e|--interface)
 			interface="$2"
-			shift
+			shift 2
 			;;
 		-s|--stylesheet)
 			stylesheet=1
@@ -71,10 +71,12 @@ do
 			;;
 		-h|--help)
                         printHelp
+			shift
 			;;
         esac
-        shift
 done
+
+# 0. perform checks prior execution (!ip, !root)
 
 # if ip was not supplied, print help menu and exit
 if [ -z $ip ]; then
@@ -99,6 +101,7 @@ printBanner
 printSeparator
 
 # 1. prepare directory to store results
+
 if [[ "${outputDirectory: -1}" != "/" || ! -d "$outputDirectory" ]]; then
 	printf "Error: \n\nDirectory $outputDirectory does not exist or has no trailing slash! Please use existing dir and supply the / at the end\n\n"
 	exit 1
@@ -142,6 +145,7 @@ if [ -z $openPorts ]; then
 fi
 
 # 4. run nmap service and version scan, display only open port results, save as all output formats
+
 printf "RUN NMAP SERVICE AND VERSION SCAN - on all ports found (tcp and udp)\n\n"
 nmapServiceScanOutputFile=$resultDirectory"nmapServiceScan"
 printf "Command:  /usr/bin/nmap -p $openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open -vvv\n\n"  
