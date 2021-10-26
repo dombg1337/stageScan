@@ -117,8 +117,7 @@ printf "RUN MASSCAN ON ALL PORTS - Target: "$ip" using the interface "$interface
 masscanOutputFile=$resultDirectory"masscanOutput"
 printf "Command:  /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate $rate -oG $masscanOutputFile\n\n"
 
-#/usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate -oG $masscanOutputFile
-/usr/bin/masscan -p1-1000 $ip -e $interface --rate $rate -oG $masscanOutputFile
+/usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate -oG $masscanOutputFile
 
 printf "Results of masscan\n\n"
 bash -c "cat $masscanOutputFile"
