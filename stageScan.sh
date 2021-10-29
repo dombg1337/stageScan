@@ -148,9 +148,9 @@ fi
 
 printf "RUN NMAP SERVICE AND VERSION SCAN - on all ports found (tcp and udp)\n\n"
 nmapServiceScanOutputFile=$resultDirectory"nmapServiceScan"
-printf "Command:  /usr/bin/nmap -p $openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open -vvv\n\n"  
+printf "Command:  /usr/bin/nmap -Pn -p $openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open -vvv\n\n"  
 sleep 2
-(/usr/bin/nmap -p$openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open -vvv && printf "\nScan successful\n\n")
+(/usr/bin/nmap -Pn -p$openPorts -sSU -sC -sV -oA $nmapServiceScanOutputFile $ip --open -vvv && printf "\nScan successful\n\n")
 printSeparator
 
 # 5. run nmap vuln scan if --vuln was set
@@ -158,9 +158,9 @@ printSeparator
 if [ ! -z $vuln ]; then
 	printf "RUN NMAP VULN SCAN - on all ports found (tcp and udp)\n\n"
 	nmapVulnScanOutputFile=$resultDirectory"nmapVulnScan"
-	printf "Command:  /usr/bin/nmap -p $openPorts -sSU --script='vuln' -oA $nmapVulnScanOutputFile $ip --open -vvv\n\n" 	
+	printf "Command:  /usr/bin/nmap -Pn -p $openPorts -sSU --script='vuln' -oA $nmapVulnScanOutputFile $ip --open -vvv\n\n" 	
 	sleep 2
-	(/usr/bin/nmap -p$openPorts -sSU --script="vuln" -oA $nmapVulnScanOutputFile $ip --open -vvv && printf "Vuln Scan successful")
+	(/usr/bin/nmap -Pn -p$openPorts -sSU --script="vuln" -oA $nmapVulnScanOutputFile $ip --open -vvv && printf "Vuln Scan successful")
 	printSeparator
 fi
 
