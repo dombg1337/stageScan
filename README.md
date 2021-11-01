@@ -19,7 +19,7 @@ This is especially helpful in lab environments and/or CTF's (not recommended for
 
 **Mind:** Please don't grant users permanent sudo rights to this script, easy PrivEsc via Command Injection since I don't sanitize any input.
 
-### Usage examples
+## Usage examples
 
 ```
 sudo ./stageScan --ip 192.168.1.1 --vuln
