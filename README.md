@@ -27,6 +27,11 @@ sudo ./stageScan --ip 192.168.1.1 --rate=10000 --vuln --stylesheet
 sudo ./stageScan --ip 192.168.1.1 --rate=500 --nmapUDP 100 -e tun0 --vuln
 sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rate=800 -e tun0 --vuln
 ```
+### List of IP's to check 
+
+stageScan does not currently support a list of IP's to test. To get around this issue (still only sequential solution), you can make use of the xargs command and supply a list of ips, each in a new line.
+
+`cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'`
 
 ### Nmap UDP scans
 
@@ -44,11 +49,7 @@ First and foremost, performing reliable UDP scans is pretty hard due to its conn
 
 Resource: [nmap udp scans](https://nmap.org/book/scan-methods-udp-scan.html)
 
-### List of IP's to check 
 
-stageScan does not currently support a list of IP's to test. To get around this issue (still only sequential solution), you can make use of the xargs command and supply a list of ips, each in a new line.
-
-`cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'`
 
 ## Requirements
 
