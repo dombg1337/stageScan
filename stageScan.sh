@@ -3,12 +3,13 @@
 function printHelp {
 	printBanner
 	echo "Usage:"
-	echo "|    -ip/--ip 192.168.1.1           | sets the target ip                                          | required"
-	echo "|    -r/--rate 500                  | sets the masscan packet/second rate, default: 1000          | optional"
-	echo "|    -d/--directory /home/dombg/    | sets the output directory (with trailing /), default /tmp/  | optional"
-	echo "|    --vuln                         | triggers nmap vuln scripts                                  | optional"
-	echo "|    -e/--interface tun0            | sets the network interface, default: eth0                   | optional"
-	echo "|    -s/--stylesheet                | generates .html output files for nmap results               | optional"
+	echo "|    -ip/--ip 192.168.1.1           | sets the target ip                                              | required"
+	echo "|    -r/--rate 500                  | sets the masscan packet/second rate, default: 1000              | optional"
+	echo "|    -d/--directory /home/dombg/    | sets the output directory (with trailing /), default /tmp/      | optional"
+	echo "|    -u/--nmapUDP 400               | triggers additional nmap -sU --top-ports scan, default: top 200 | optional"
+	echo "|    -e/--interface tun0            | sets the network interface, default: eth0                       | optional"
+	echo "|    -s/--stylesheet                | generates .html output files for nmap results                   | optional"	
+	echo "|    --vuln                         | triggers nmap vuln scripts                                      | optional"
 	echo "|    -h/--help                      | displays the help menu"
 	printf "\n\n"
 	echo "Scan a list of IP's (supply each in a newline): cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'"
@@ -39,6 +40,7 @@ ip=""
 vuln=""
 interface="eth0"
 rate=1000
+nmapUDP=""
 stylesheet=""
 outputDirectory="/tmp/"
 # Load the user defined parameters
@@ -60,6 +62,10 @@ do
                 --vuln)
                         vuln=1
 			shift
+                        ;;
+		-u|--nmapUDP)
+                        nmapUDP="$2"
+			shift 2
                         ;;
 		-e|--interface)
 			interface="$2"
@@ -118,19 +124,19 @@ printSeparator
 
 printf "RUN MASSCAN ON ALL PORTS - Target: "$ip" using the interface "$interface"\n\n"
 masscanOutputFile=$resultDirectory"masscanOutput"
-printf "Command:  /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate $rate -oG $masscanOutputFile\n\n"
+printf "Command:  /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate $rate | /usr/bin/tee $masscanOutputFile\n\n"
 
-/usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate -oG $masscanOutputFile
+/usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate | /usr/bin/tee $masscanOutputFile
 
 printf "Results of masscan\n\n"
-bash -c "cat $masscanOutputFile"
+/usr/bin/cat $masscanOutputFile
 printSeparator
 
 # 3. filter found tcp and udp ports separately
 
-# -------------------cat masscan output-------- get 5th field ----only tcp------keep 0-9 only--------replace \n with ,-----remove last ,----
-openTCPPorts=`/usr/bin/cat $masscanOutputFile | cut -d ' ' -f 5 | grep tcp |  sed 's/[^0-9]//g' | /usr/bin/tr '\n' ',' | sed 's/\(.*\),/\1/'`
-openUDPPorts=`/usr/bin/cat $masscanOutputFile | cut -d ' ' -f 5 | grep udp |  sed 's/[^0-9]//g' | /usr/bin/tr '\n' ',' | sed 's/\(.*\),/\1/'`
+# -------------------cat masscan output-------- get 4th field ----only tcp------keep 0-9 only--------replace \n with ,-----remove last ,----
+openTCPPorts=`/usr/bin/cat $masscanOutputFile | cut -d ' ' -f 4 | grep tcp |  sed 's/[^0-9]//g' | /usr/bin/tr '\n' ',' | sed 's/\(.*\),/\1/'`
+openUDPPorts=`/usr/bin/cat $masscanOutputFile | cut -d ' ' -f 4 | grep udp |  sed 's/[^0-9]//g' | /usr/bin/tr '\n' ',' | sed 's/\(.*\),/\1/'`
 openPorts=""
 if [ ! -z $openTCPPorts ]; then
 	openPorts="T:"$openTCPPorts","
@@ -182,4 +188,16 @@ if [ ! -z $stylesheet ]; then
 	
 	printSeparator
 fi
+
+# 7. run nmap udp scan (possibly better results than masscan), display only open port results, save as all output formats
+
+if [ ! -z $nmapUDP ]; then
+	printf "RUN NMAP UDP Scan on selected --top-ports $nmapUDP with version detection -sV \n\n"
+	nmapUDPScanOutputFile=$resultDirectory"nmapUDPScan"
+	printf "Command:  /usr/bin/nmap -Pn --top-ports $nmapUDP -sU -sV --version-intensity 0 -oA $nmapUDPScanOutputFile $ip --open -vvv\n\n"  
+	sleep 2
+	(/usr/bin/nmap -Pn --top-ports $nmapUDP -sU -sV --version-intensity 0 -oA $nmapUDPScanOutputFile $ip --open -vvv && printf "\nScan successful\n\n")
+	printSeparator
+fi
+
 printf "Results are stored in: "$resultDirectory
