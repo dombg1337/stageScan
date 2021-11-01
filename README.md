@@ -4,7 +4,7 @@
 
 The script stages scans with masscan and nmap providing greater time efficiency (than nmap -p- scans) while still scanning all ports on the target and leveraging nmap's powerful capabilities including NSE.
 
-This is especially helpful in lab environments and/or CTF's (not recommended for stealthy red team assessments ;)). 
+This is especially helpful for time limited engagements, for exams (f.e. OSCP) or other sorts of CTF's. 
 
 ## Execution
 
@@ -42,7 +42,7 @@ First and foremost, performing reliable UDP scans is pretty hard due to its conn
 - **Protocol-specific payload**: "For most ports, this packet will be empty (no payload), but for a few of the more common ports a protocol-specific payload will be sent". These protocol-specific payloads can potentially trigger a application response which enables detection of open ports more reliably.
 - **Version detection scans**: "Version detection (-sV) is often needed to differentiate open from filtered UDP ports". Again, same topic. -sV scans will send protocol-specific paylods to enumerate the service+version which might help detecting open ports.
 
-#### How to speed up nmap UDP scans
+#### How stageScan speeds up nmap UDP scans
 
 - Redurce target ports to most common ports (`--top-ports`).
 - `--version-intensity 0`, ".. directs Nmap to only try the probes most likely to be effective against a given port number". 
