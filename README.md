@@ -33,13 +33,13 @@ stageScan does not currently support a list of IP's to test. To get around this 
 
 `cat ips | xargs -I % /bin/bash -c 'sudo ./stageScan.sh --ip %'`
 
-### Nmap UDP scans
+### Why perform additional nmap UDP scans?
 
 First and foremost, performing reliable UDP scans is pretty hard due to its connection-less nature. While masscan can detect open UDP ports, nmap UDP scans can be a valuable addition. In the end it is a trade off between time (masscan) and accuracy (nmap). 
 
 #### Why nmap scans might be more reliable
 
-- **Protocol-specific payload**: "For most ports, this packet will be empty (no payload), but for a few of the more common ports a protocol-specific payload will be sent". These protocol-specific payloads can potentially trigger a application response which enables detection of open ports more reliably.
+- **Protocol-specific payload**: "For most ports, this packet will be empty (no payload), but for a few of the more common ports a protocol-specific payload will be sent". These protocol-specific payloads can potentially trigger an application (layer) response of the target service which enables detection of open ports more reliably.
 - **Version detection scans**: "Version detection (-sV) is often needed to differentiate open from filtered UDP ports". Again, same topic. -sV scans will send protocol-specific paylods to enumerate the service+version which might help detecting open ports.
 
 #### How stageScan speeds up nmap UDP scans
