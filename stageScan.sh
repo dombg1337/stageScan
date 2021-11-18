@@ -128,8 +128,6 @@ printf "Command:  /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate 
 
 /usr/bin/masscan -p1-65535,U:1-65535 $ip -e $interface --rate=$rate | /usr/bin/tee $masscanOutputFile
 
-printf "Results of masscan\n\n"
-/usr/bin/cat $masscanOutputFile
 printSeparator
 
 # 3. filter found tcp and udp ports separately
