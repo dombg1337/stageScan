@@ -23,9 +23,9 @@ This is especially helpful for time limited engagements, for exams (f.e. OSCP) o
 
 ```
 sudo ./stageScan --ip 192.168.1.1 --vuln
-sudo ./stageScan --ip 192.168.1.1 --rate=10000 --vuln --stylesheet
-sudo ./stageScan --ip 192.168.1.1 --rate=500 --nmapUDP 100 -e tun0 --vuln
-sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rate=800 -e tun0 --vuln
+sudo ./stageScan --ip 192.168.1.1 --rate 10000 --vuln --stylesheet
+sudo ./stageScan --ip 192.168.1.1 --rate 500 --nmapUDP 100 -e tun0 --vuln
+sudo ./stageScan --ip 192.168.1.1 --directory /home/dombg/outputDirectory/ --rate 800 -e tun0 --vuln
 ```
 ### List of IP's to check 
 
